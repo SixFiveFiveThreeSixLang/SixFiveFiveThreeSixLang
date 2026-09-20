@@ -8,9 +8,9 @@ import io.github.placereporter99.sixfivefivethreesixlang.types.helpers.functions
 import ch.obermuhlner.math.big.*;
 
 sealed public class SFFTSNumber extends SFFTSObject<BigComplex> permits SFFTSRealNumber {
-    public static final SFFTSNumber ZERO = new SFFTSNumber(BigComplex.ZERO);
-    public static final SFFTSNumber ONE = new SFFTSNumber(BigComplex.ONE);
-    public static final SFFTSNumber MINUS_ONE = new SFFTSNumber(BigComplex.valueOf(-1));
+    public static final SFFTSNumber ZERO = SFFTSNumber.create(BigComplex.ZERO);
+    public static final SFFTSNumber ONE = SFFTSNumber.create(BigComplex.ONE);
+    public static final SFFTSNumber MINUS_ONE = SFFTSNumber.create(BigComplex.valueOf(-1));
 
     private static MathContext context = new MathContext(1024, RoundingMode.HALF_EVEN);
 
@@ -35,7 +35,7 @@ sealed public class SFFTSNumber extends SFFTSObject<BigComplex> permits SFFTSRea
     }
 
     public static SFFTSRealNumber create(BigDecimal data) {
-        return new SFFTSRealNumber(data);
+        return SFFTSRealNumber.create(data);
     }
 
     protected SFFTSNumber(BigComplex data) {
@@ -82,7 +82,16 @@ sealed public class SFFTSNumber extends SFFTSObject<BigComplex> permits SFFTSRea
         return operateSingle((x, y) -> BigComplex.valueOf(x.abs(y)));
     }
 
+    public SFFTSNumber norm() {
+        return operateSingle((x, y) -> BigComplex.valueOf(x.absSquare(y)));
+    }
+
     public SFFTSNumber pow(SFFTSNumber o) throws ArithmeticException {
         return operate(o, BigComplexMath::pow);
+    }
+
+    @Override
+    public boolean isTruthy() {
+        return !norm().getData().equals(BigComplex.ZERO);
     }
 }

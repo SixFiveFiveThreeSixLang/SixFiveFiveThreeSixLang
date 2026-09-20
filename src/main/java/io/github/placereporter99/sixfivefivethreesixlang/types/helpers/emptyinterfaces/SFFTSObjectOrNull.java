@@ -3,5 +3,5 @@ package io.github.placereporter99.sixfivefivethreesixlang.types.helpers.emptyint
 import io.github.placereporter99.sixfivefivethreesixlang.types.SFFTSObject;
 
 public interface SFFTSObjectOrNull {
-    public SFFTSObject<?> obj();
+    SFFTSObject<?> obj();
 }

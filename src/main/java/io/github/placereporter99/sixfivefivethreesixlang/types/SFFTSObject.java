@@ -29,4 +29,10 @@ abstract public class SFFTSObject<T> implements SFFTSObjectOrNull {
             return getData() == other.getData();
         }
     }
+
+    abstract public boolean isTruthy();
+
+    public String toString() {
+        return data.toString();
+    }
 }

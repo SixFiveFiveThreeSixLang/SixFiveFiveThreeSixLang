@@ -2,10 +2,12 @@ package io.github.placereporter99.sixfivefivethreesixlang.types.iterable;
 
 import io.github.placereporter99.sixfivefivethreesixlang.types.*;
 import io.github.placereporter99.sixfivefivethreesixlang.types.helpers.emptyinterfaces.SFFTSIterable;
+import io.github.placereporter99.sixfivefivethreesixlang.types.misc.SFFTSNull;
+import io.github.placereporter99.sixfivefivethreesixlang.types.number.SFFTSInteger;
 
 import java.util.*;
 
-public sealed class SFFTSFiniteIterable extends SFFTSObject<ArrayList<SFFTSObject<?>>> implements SFFTSIterable permits SFFTSStack {
+public class SFFTSFiniteIterable extends SFFTSObject<List<SFFTSObject<?>>> implements SFFTSIterable {
 
     public SFFTSFiniteIterable(SFFTSObject<?>... data) {
         super(new ArrayList<>(Arrays.stream(data).toList()));
@@ -16,10 +18,16 @@ public sealed class SFFTSFiniteIterable extends SFFTSObject<ArrayList<SFFTSObjec
     }
 
     public SFFTSObject<?> pop() {
+        if (getData().isEmpty()) {
+            return SFFTSNull.NULL;
+        }
         return getData().removeLast();
     }
 
     public SFFTSObject<?> popHead() {
+        if (getData().isEmpty()) {
+            return SFFTSNull.NULL;
+        }
         return getData().removeFirst();
     }
 
@@ -53,5 +61,14 @@ public sealed class SFFTSFiniteIterable extends SFFTSObject<ArrayList<SFFTSObjec
 
     public SFFTSObject<?> peekHead() {
         return getData().getFirst();
+    }
+
+    public SFFTSInteger length() {
+        return SFFTSInteger.create(getData().size());
+    }
+
+    @Override
+    public boolean isTruthy() {
+        return length().isTruthy();
     }
 }

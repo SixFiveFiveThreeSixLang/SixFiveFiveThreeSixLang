@@ -3,8 +3,6 @@ package io.github.placereporter99.sixfivefivethreesixlang.types.number;
 import java.math.*;
 
 sealed public class SFFTSInteger extends SFFTSRealNumber permits SFFTSByte {
-    public static final SFFTSInteger TRUE = new SFFTSInteger(1);
-    public static final SFFTSInteger FALSE = new SFFTSInteger(0);
 
     public static SFFTSInteger create(BigInteger data) {
         try {

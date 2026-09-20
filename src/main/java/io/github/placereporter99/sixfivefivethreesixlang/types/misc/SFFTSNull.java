@@ -8,4 +8,9 @@ public class SFFTSNull extends SFFTSObject<Void> {
     private SFFTSNull() {
         super(null);
     }
+
+    @Override
+    public boolean isTruthy() {
+        return false;
+    }
 }

@@ -7,4 +7,9 @@ public class SFFTSString extends SFFTSObject<String> implements SFFTSIterable {
     public SFFTSString(String data) {
         super(data);
     }
+
+    @Override
+    public boolean isTruthy() {
+        return !getData().isEmpty();
+    }
 }

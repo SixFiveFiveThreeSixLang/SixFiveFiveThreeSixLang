@@ -7,12 +7,17 @@ import java.util.*;
 import java.util.concurrent.*;
 import java.util.function.*;
 
-public class SFFTSFunction extends SFFTSObject<BiFunction<SFFTSFiniteIterable, FunctionDataOutPipeline, Logger>>{
-    public SFFTSFunction(BiFunction<SFFTSFiniteIterable, FunctionDataOutPipeline, Logger> function) {
+public class SFFTSFunction extends SFFTSObject<BiConsumer<SFFTSFiniteIterable, FunctionDataOutPipeline>>{
+    public SFFTSFunction(BiConsumer<SFFTSFiniteIterable, FunctionDataOutPipeline> function) {
         super(function);
     }
 
-    public Logger execute(SFFTSFiniteIterable stack, FunctionDataOutPipeline pipeline) {
-        return getData().apply(stack, pipeline);
+    public void execute(SFFTSFiniteIterable stack, FunctionDataOutPipeline pipeline) {
+        getData().accept(stack, pipeline);
+    }
+
+    @Override
+    public boolean isTruthy() {
+        return true;
     }
 }

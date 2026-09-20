@@ -25,4 +25,9 @@ public final class SFFTSInfiniteIterable extends SFFTSObject<SFFTSFunction> impl
         }
         return result.obj();
     }
+
+    @Override
+    public boolean isTruthy() {
+        return true;
+    }
 }
