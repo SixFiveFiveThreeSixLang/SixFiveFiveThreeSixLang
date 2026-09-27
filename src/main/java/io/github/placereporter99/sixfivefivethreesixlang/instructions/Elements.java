@@ -10,6 +10,7 @@ import io.github.placereporter99.sixfivefivethreesixlang.types.iterable.SFFTSFin
 import io.github.placereporter99.sixfivefivethreesixlang.types.iterable.SFFTSInfiniteIterable;
 import io.github.placereporter99.sixfivefivethreesixlang.types.number.SFFTSByte;
 import io.github.placereporter99.sixfivefivethreesixlang.types.number.SFFTSNumber;
+import io.github.placereporter99.sixfivefivethreesixlang.types.number.SFFTSNumeric;
 
 import java.util.HashMap;
 import java.util.List;
@@ -72,11 +73,20 @@ final public class Elements implements ElementalClass {
     }
 
     private static void addDyad(short element, String doc, BiFunction<SFFTSObject<?>, SFFTSObject<?>, SFFTSObject<?>> function) {
-        addElement(element, doc, (x, c) -> x.push(function.apply(x.pop(), x.pop())));
+        addElement(element, doc, (x, c) -> {
+            var b = x.pop();
+            var a = x.pop();
+            x.push(function.apply(a, b));
+        });
     }
 
     private static void addTriad(short element, String doc, TriFunction<SFFTSObject<?>, SFFTSObject<?>, SFFTSObject<?>, SFFTSObject<?>> function) {
-        addElement(element, doc, (x, c) -> x.push(function.apply(x.pop(), x.pop(), x.pop())));
+        addElement(element, doc, (x, c) -> {
+            var d = x.pop();
+            var b = x.pop();
+            var a = x.pop();
+            x.push(function.apply(a, b, d));
+        });
     }
 
     private static short s(int number) {
@@ -91,17 +101,19 @@ final public class Elements implements ElementalClass {
         addConstant(s(256), "Hello, World!");
         addConstant(s(257), "Goodbye, World!");
         addConstant(s(258), List.of("Fizz", "Buzz"));
-        addElement(s(259), "Pushes an infinite iterable containing all non-negative integers.", (z, c) -> new SFFTSInfiniteIterable(new SFFTSFunction((x, y) -> {
+        addElement(s(259), "Pushes an infinite iterable containing all non-negative integers.", (z, c) -> new SFFTSInfiniteIterable(new SFFTSFunction((x, y, p) -> {
             var a = SFFTSNumber.ZERO;
             try {
                 while (true) {
-                    y.push(a);
+                    p.push(a);
                     a = a.add(SFFTSNumber.ONE);
                 }
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
-        }), z));
-
+        }), z, c));
+        addDyad(s(512), "Adds two numbers together.",(x, y) -> ((SFFTSNumeric) x).add((SFFTSNumeric) y));
+        addDyad(s(513), "Subtracts one number from another",(x, y) -> ((SFFTSNumeric) x).subtract((SFFTSNumeric) y));
+        addDyad(s(514), "Adds two numbers together.",(x, y) -> ((SFFTSNumeric) x).add((SFFTSNumeric) y));
     }
 }

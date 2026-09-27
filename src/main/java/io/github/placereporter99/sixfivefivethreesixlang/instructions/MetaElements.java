@@ -136,7 +136,7 @@ public class MetaElements implements ElementalClass {
                         Elements.addSimpleToInstructionStack(a, i);
                     } catch (SFFTSRuntimeException ex) {
                         if (Arrays.asList(specialIntermediates).contains(a.getFirst())) {
-                            h.put(s, new ParsedCode(i));
+                            h.put(s, new ParsedCode(i.toArray(BiConsumer[]::new)));
                         } else if (a.getFirst() == elementEnd) {
                             return;
                         } else {

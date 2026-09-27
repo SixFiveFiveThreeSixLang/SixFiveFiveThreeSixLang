@@ -1,5 +1,6 @@
 package io.github.placereporter99.sixfivefivethreesixlang.types.iterable;
 
+import io.github.placereporter99.sixfivefivethreesixlang.context.Context;
 import io.github.placereporter99.sixfivefivethreesixlang.types.*;
 import io.github.placereporter99.sixfivefivethreesixlang.types.executable.SFFTSFunction;
 import io.github.placereporter99.sixfivefivethreesixlang.types.helpers.FunctionDataOutPipeline;
@@ -9,16 +10,16 @@ import io.github.placereporter99.sixfivefivethreesixlang.types.helpers.emptyinte
 public final class SFFTSInfiniteIterable extends SFFTSObject<SFFTSFunction> implements SFFTSIterable {
     private final FunctionDataOutPipeline pipeline = new FunctionDataOutPipeline();
 
-    public SFFTSInfiniteIterable(SFFTSFunction function, SFFTSFiniteIterable stack) {
+    public SFFTSInfiniteIterable(SFFTSFunction function, SFFTSFiniteIterable stack, Context context) {
         super(function);
-        Thread.startVirtualThread(() -> function.execute(stack, pipeline));
+        Thread.startVirtualThread(() -> function.execute(stack, context, pipeline));
     }
 
     public SFFTSObject<?> getNextValue() throws InterruptedException {
         return pipeline.pull().obj();
     }
 
-    public SFFTSObject<?> getReturnValue() throws InterruptedException {
+    public SFFTSObject<?> getLastValue() throws InterruptedException {
         var result = pipeline.pull();
         while (!(result instanceof Return)) {
             result = pipeline.pull();

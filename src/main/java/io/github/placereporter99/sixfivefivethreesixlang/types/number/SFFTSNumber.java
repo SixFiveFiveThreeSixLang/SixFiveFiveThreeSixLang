@@ -3,11 +3,10 @@ package io.github.placereporter99.sixfivefivethreesixlang.types.number;
 import java.math.*;
 import java.util.function.*;
 
-import io.github.placereporter99.sixfivefivethreesixlang.types.SFFTSObject;
 import io.github.placereporter99.sixfivefivethreesixlang.types.helpers.functions.TriFunction;
 import ch.obermuhlner.math.big.*;
 
-sealed public class SFFTSNumber extends SFFTSObject<BigComplex> permits SFFTSRealNumber {
+sealed public class SFFTSNumber extends SFFTSNumeric<SFFTSNumber, BigComplex> permits SFFTSRealNumber {
     public static final SFFTSNumber ZERO = SFFTSNumber.create(BigComplex.ZERO);
     public static final SFFTSNumber ONE = SFFTSNumber.create(BigComplex.ONE);
     public static final SFFTSNumber MINUS_ONE = SFFTSNumber.create(BigComplex.valueOf(-1));

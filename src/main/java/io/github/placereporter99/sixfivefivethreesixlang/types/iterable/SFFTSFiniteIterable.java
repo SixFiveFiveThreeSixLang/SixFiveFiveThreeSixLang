@@ -19,14 +19,14 @@ public class SFFTSFiniteIterable extends SFFTSObject<List<SFFTSObject<?>>> imple
 
     public SFFTSObject<?> pop() {
         if (getData().isEmpty()) {
-            return SFFTSNull.NULL;
+            return SFFTSNull.STACK_EMPTY;
         }
         return getData().removeLast();
     }
 
     public SFFTSObject<?> popHead() {
         if (getData().isEmpty()) {
-            return SFFTSNull.NULL;
+            return SFFTSNull.STACK_EMPTY;
         }
         return getData().removeFirst();
     }
