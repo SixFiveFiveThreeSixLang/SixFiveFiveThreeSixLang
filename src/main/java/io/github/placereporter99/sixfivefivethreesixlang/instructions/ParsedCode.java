@@ -30,6 +30,10 @@ public class ParsedCode {
 
     public ContextAndStack execute(Context context, SFFTSObject<?>... arguments) {
         var stack = new SFFTSFiniteIterable(arguments);
+        return executeExistingStack(context, stack);
+    }
+
+    public ContextAndStack executeExistingStack(Context context, SFFTSFiniteIterable stack) {
         instructionStack.forEach(x -> x.accept(stack, context, context.pipeline));
         return new ContextAndStack(context, stack.getData());
     }

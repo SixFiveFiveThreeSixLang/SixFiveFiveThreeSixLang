@@ -4,11 +4,16 @@ import io.github.placereporter99.sixfivefivethreesixlang.context.Context;
 import io.github.placereporter99.sixfivefivethreesixlang.types.SFFTSObject;
 import io.github.placereporter99.sixfivefivethreesixlang.types.exceptions.SFFTSException;
 import io.github.placereporter99.sixfivefivethreesixlang.types.exceptions.SFFTSRuntimeException;
+import io.github.placereporter99.sixfivefivethreesixlang.types.executable.SFFTSFunction;
 import io.github.placereporter99.sixfivefivethreesixlang.types.iterable.SFFTSFiniteIterable;
+import io.github.placereporter99.sixfivefivethreesixlang.types.iterable.SFFTSString;
 import io.github.placereporter99.sixfivefivethreesixlang.types.number.SFFTSInteger;
 
 import javax.swing.text.html.ListView;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.function.Predicate;
@@ -166,12 +171,47 @@ public class MetaElements implements ElementalClass {
             }
             return SFFTSInteger.create(number);
         });
+        addSimpleStructure(s(65533), s(65535), "Interprets as a base 65535 compressed sequence of bytes, then interpreted as UTF-8.", x -> {
+            if (x.getFirst() == s(65533)) {
+                x.removeFirst();
+            }
+            if (x.getLast() == s(65533)) {
+                x.removeLast();
+            }
+            var placeCounter = BigInteger.ZERO;
+            var number = BigInteger.ZERO;
+            var sfftf = BigInteger.valueOf(65535);
+            var tfs = BigInteger.valueOf(256);
+            for (var value : x.reversed()) {
+                number = number.add(BigInteger.valueOf(value).multiply(sfftf.pow(placeCounter.intValueExact())));
+                placeCounter = placeCounter.add(BigInteger.ONE);
+            }
+            var b = new ByteArrayOutputStream();
+            while (number.compareTo(BigInteger.ZERO) > 0) {
+                b.write(number.remainder(tfs).byteValue());
+                number = number.divide(tfs);
+            }
+            var arr = b.toByteArray();
+            var s = new byte[arr.length];
+            for (var i = 0; i < arr.length; i++) {
+                s[arr.length - i - 1] = arr[i];
+            }
+            return new SFFTSString(new String(s, StandardCharsets.UTF_8));
+        });
+        addBracketingStructure(s(65500), new Short[]{}, s(65535), "Used to construct lists manually. It actually just creates a subprogram and returns the stack.", (a, b, c) -> {
+            var stack = new SFFTSFiniteIterable();
+            a.get(s(65500)).executeExistingStack(c, stack);
+            b.push(stack);
+        });
+        addBracketingStructure(s(65400), new Short[]{}, s(65535), "Creates a function that can be pushed onto the stack.", (a, b, c) -> {
+            b.push(new SFFTSFunction(a.get(s(65400))));
+        });
         addBracketingStructure(s(65280), new Short[]{s(65300)}, s(65535), "An if statement. Does not inherently support else-if. Nesting if statements will be required for that.", (a, b, c) -> {
             var cond = b.pop().isTruthy();
             if (cond) {
-                a.get(s(65280)).execute(c, b);
+                a.get(s(65280)).executeExistingStack(c, b);
             } else {
-                a.get(s(65300)).execute(c, b);
+                a.get(s(65300)).executeExistingStack(c, b);
             }
         });
     }

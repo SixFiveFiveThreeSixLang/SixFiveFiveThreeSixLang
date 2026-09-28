@@ -107,5 +107,7 @@ public class Codepage {
         put('㊾', 49);
         put('㊿', 50);
         put('␡', 127);
+        put('⧛', 65500);
+        put('⧚', 65535);
     }
 }

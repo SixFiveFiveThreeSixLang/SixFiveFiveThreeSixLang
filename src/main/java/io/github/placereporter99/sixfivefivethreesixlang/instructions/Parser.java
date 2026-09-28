@@ -27,7 +27,7 @@ final public class Parser {
         throw new AssertionError("This class cannot be instantiated.");
     }
 
-    private static List<Map.Entry<Predicate<String>, Function<String, SFFTSObject<?>>>> inputParsers = new ArrayList<>();
+    private final static List<Map.Entry<Predicate<String>, Function<String, SFFTSObject<?>>>> inputParsers = new ArrayList<>();
 
     public static ParsedCode parseCode(String code) {
         return parseCode(code.codePoints().mapToObj(x -> Codepage.charToShort(new String(Character.toChars(x)))).toList());
@@ -87,20 +87,12 @@ final public class Parser {
             return SFFTSNumber.create(BigComplex.valueOf(re, im));
         });
         // Function //
-        addRegexParser("^λ[\0]*$".replace("\0", Codepage.getCodepage()), x -> new SFFTSFunction(Parser.parseCode(x.substring(1))));
+        addRegexParser("^λ[\0]*⧚$".replace("\0", Codepage.getCodepage()), x -> new SFFTSFunction(Parser.parseCode(x.substring(1, x.length() - 1))));
         //   List   //
-        /* addComplexParser(x -> {
-            var a = x.replaceAll("[^\\[\\]]", "");
-            var s = "";
-            for (var i : a.toCharArray()) {
-                s = s.concat(String.valueOf(i));
-                if (s.endsWith("[]")) {
-                    s = s.substring(0, s.length() - 2);
-                }
-            }
-            return s.isEmpty() && x.startsWith("[") && x.endsWith("]");
-        }, x -> {
-
-        }); */
+        addRegexParser("⧛[\0]⧚".replace("\0", Codepage.getCodepage()), x -> {
+            var s = new SFFTSFiniteIterable();
+            Parser.parseCode(x.substring(1, x.length() - 1)).executeExistingStack(new Context(), s);
+            return s;
+        });
     }
 }
