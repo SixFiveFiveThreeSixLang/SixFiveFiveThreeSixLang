@@ -1,7 +1,6 @@
 package io.github.placereporter99.sixfivefivethreesixlang.types;
 
 import ch.obermuhlner.math.big.BigComplex;
-import io.github.placereporter99.sixfivefivethreesixlang.types.executable.SFFTSFunction;
 import io.github.placereporter99.sixfivefivethreesixlang.types.iterable.SFFTSFiniteIterable;
 import io.github.placereporter99.sixfivefivethreesixlang.types.iterable.SFFTSString;
 import io.github.placereporter99.sixfivefivethreesixlang.types.misc.SFFTSNull;
@@ -50,7 +49,6 @@ public final class Conversions {
         addStandardConversion(SFFTSByte.class, Byte.class);
         addStandardConversion(SFFTSBoolean.class, Boolean.class);
         addStandardConversion(SFFTSFiniteIterable.class, ArrayList.class);
-        addStandardConversion(SFFTSNull.class, Void.class);
         addStandardConversion(SFFTSString.class, String.class);
     }
 }
